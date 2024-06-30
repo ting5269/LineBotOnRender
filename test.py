@@ -41,8 +41,8 @@ def handle_message(event):
     user_id = event.source.user_id
     user_input = event.message.text
 
-    if user_input == "@你好":
-        reply_text = "你好"
+    if user_input == "你好":
+        reply_text = "你好666"
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=reply_text)
