@@ -2,6 +2,7 @@ from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageSendMessage, AudioSendMessage
+from linebot.models import FlexSendMessage
 
 app = Flask(__name__)
 
@@ -22,7 +23,7 @@ milestone_images = {
     20: "https://i.imgur.com/4QfKuz1.png"
 }
 
-baseurl = 'https://4a34-2001-b400-e25f-8c46-d41d-e2a-f29d-728c.ngrok-free.app'  # 靜態檔案網址
+
 
 # 回调函数
 @app.route("/callback", methods=['POST'])
@@ -42,7 +43,7 @@ def handle_message(event):
     user_input = event.message.text
 
     if user_input == "你好":
-        reply_text = "你好666"
+        reply_text = "你好"
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=reply_text)
@@ -97,15 +98,72 @@ def handle_message(event):
             line_bot_api.reply_message(event.reply_token, message)
         except:
             line_bot_api.reply_message(event.reply_token,TextSendMessage(text='發生錯誤！'))
-    elif user_input == '被搖了哈哈哈':
-        try:
-            message = AudioSendMessage(
-                original_content_url=baseurl + '66666.m4a',  # 聲音檔置於static資料夾
-                duration=20000  # 聲音長度20秒
-            )
-            line_bot_api.reply_message(event.reply_token, message)
-        except:
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text='發生錯誤！'))
+    
+    elif user_input == "五條老師":
+        flex_message = FlexSendMessage(
+            alt_text="69",
+            contents={
+                "type": "bubble",
+                "header": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": "Flex Message Corp",
+                            "color": "#FFFFFF",
+                            "weight": "bold"
+                        }
+                    ]
+                },
+                "hero": {
+                    "type": "image",
+                    "url": "https://i.imgur.com/BfLKgK8.png",
+                    "size": "xl"
+                },
+                "body": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": "Gojo Satoru",
+                            "weight": "bold",
+                            "align": "center"
+                        },
+                        {
+                            "type": "text",
+                            "text": "Jujutsu Kaisen",
+                            "align": "center"
+                        },
+                        {
+                            "type": "separator",
+                            "margin": "md"
+                        },
+                        {
+                            "type": "button",
+                            "action": {
+                                "type": "uri",
+                                "label": "Visit our website",
+                                "uri": "https://youtu.be/4Wl8Lj53pEU?si=99GCqILY3CDlzza8"
+                            }
+                        }
+                    ]
+                },
+                "styles": {
+                    "header": {
+                        "backgroundColor": "#00FFFF"
+                    }
+                }
+            }
+        )
+        line_bot_api.reply_message(event.reply_token, flex_message)
+    else:
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="收到訊息！")
+        )
+    
 
 if __name__ == "__main__":
     app.run()
